@@ -14,7 +14,6 @@ services:
     restart: always
     environment:
       - MYSQL_DATABASE=admin
-      - MYSQL_ROOT_HOST=localhost
       - MYSQL_ROOT_USER=root
       - MYSQL_ROOT_PASSWORD=root
 
