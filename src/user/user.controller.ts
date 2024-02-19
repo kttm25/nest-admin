@@ -1,9 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
     @Get()
-    all(){
+    all(): Object{
         return ['users'];
     }
 }
