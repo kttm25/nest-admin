@@ -1,11 +1,12 @@
-import { BadRequestException, Body, Controller, Post, Get, NotFoundException, Res } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post, Get, NotFoundException, Res, Req, UseInterceptors, ClassSerializerInterceptor, Delete } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcryptjs';
 import { RegisterDTO } from './models/register.dto';
 import { JwtService } from '@nestjs/jwt';
-import { Response } from 'express';
-import { PassThrough } from 'stream';
+import { Request, Response } from 'express';
 
+//Est couplé avec le decorateur @Exclude du model afin d'empecher l'affichage de champ non desiré
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller()
 export class AuthController {
 
@@ -31,11 +32,11 @@ export class AuthController {
         });
     }
 
-    @Get('login')
+    @Post('login')
     async login(
         @Body('email') email : string,
         @Body('password') password : string,
-        @Res({passthrough: true}) response: Response
+        @Res() response: Response
     ){
         const user = await this.userService.findOne({email});
         if(!user){
@@ -49,5 +50,22 @@ export class AuthController {
             response.cookie("jwt", jwt, {httpOnly: true})
             return user;
         }
-    }   
+    }
+    
+
+    @Get('user')
+    async user(@Req() request: Request){
+        const cookie = request.cookies["jwt"];
+        const data = await this.jwtService.verifyAsync(cookie)
+        return this.userService.findOne({id : data.id});
+    }
+
+    @Delete('logout')
+    async logout(@Res({passthrough: true}) response: Response){
+        response.clearCookie('jwt');
+        return {
+            message: 'success'
+        }
+    }
+
 }
