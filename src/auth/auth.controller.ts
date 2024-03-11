@@ -1,9 +1,10 @@
-import { BadRequestException, Body, Controller, Post, Get, NotFoundException, Res, Req, UseInterceptors, ClassSerializerInterceptor, Delete } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post, Get, NotFoundException, Res, Req, UseInterceptors, ClassSerializerInterceptor, Delete, UseGuards } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcryptjs';
 import { RegisterDTO } from './models/register.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
+import { AuthGuard } from './auth.guard';
 
 //Est couplé avec le decorateur @Exclude du model afin d'empecher l'affichage de champ non desiré
 @UseInterceptors(ClassSerializerInterceptor)
@@ -52,7 +53,7 @@ export class AuthController {
         }
     }
     
-
+    @UseGuards(AuthGuard)
     @Get('user')
     async user(@Req() request: Request){
         const cookie = request.cookies["jwt"];
@@ -60,6 +61,7 @@ export class AuthController {
         return this.userService.findOne({id : data.id});
     }
 
+    @UseGuards(AuthGuard)
     @Delete('logout')
     async logout(@Res({passthrough: true}) response: Response){
         response.clearCookie('jwt');
