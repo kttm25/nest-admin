@@ -5,6 +5,7 @@ import { RegisterDTO } from './models/register.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 import { AuthGuard } from './auth.guard';
+import { PassThrough } from 'stream';
 
 //Est couplé avec le decorateur @Exclude du model afin d'empecher l'affichage de champ non desiré
 @UseInterceptors(ClassSerializerInterceptor)
@@ -37,7 +38,7 @@ export class AuthController {
     async login(
         @Body('email') email : string,
         @Body('password') password : string,
-        @Res() response: Response
+        @Res({passthrough: true}) response: Response
     ){
         const user = await this.userService.findOne({email});
         if(!user){

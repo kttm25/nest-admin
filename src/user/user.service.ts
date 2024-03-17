@@ -21,4 +21,13 @@ export class UserService {
     async create(data): Promise<User>{
         return this.userRepository.save(data);
     }
+
+    async update(id: number, data): Promise<any>
+    {
+        return this.userRepository.update(id, data)
+    }
+
+    async delete(id: number): Promise<any>{
+        return this.userRepository.delete(id)
+    }
 }
