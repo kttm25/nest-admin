@@ -5,10 +5,7 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
-import { RoleController } from './role/role.controller';
-import { RoleService } from './role/role.service';
 import { RoleModule } from './role/role.module';
-
 @Module({
   imports: [
     UserModule,
@@ -26,8 +23,8 @@ import { RoleModule } from './role/role.module';
     CommonModule,
     RoleModule,
   ],
-  controllers: [AppController, RoleController],
-  providers: [AppService, RoleService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
 

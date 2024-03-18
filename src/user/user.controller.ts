@@ -27,7 +27,8 @@ export class UserController {
             first_name: body.first_name,
             last_name: body.last_name,
             email: body.email,
-            password
+            password,
+            role: {id: body.role_id}
         });
     }
 
@@ -41,7 +42,13 @@ export class UserController {
         @Param('id') id: number,
         @Body() body: UserUpdateDto)
     {
-        await  this.userService.update(id, body)
+        const {role_id, ...data} = body;
+        await  this.userService.update(id, 
+            {
+                ...data,
+                role: {id: role_id}
+            }
+        )
         return this.userService.findOne({id})
     }
 

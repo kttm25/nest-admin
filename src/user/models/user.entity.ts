@@ -1,5 +1,6 @@
 import { Exclude } from "class-transformer";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Role } from "src/role/role.entity";
+import { JoinColumn, ManyToOne, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users')
 export class User{
@@ -20,4 +21,8 @@ export class User{
     //Permet d'empeche que ce champ soit afficher
     @Exclude()
     password: string;
+
+    @ManyToOne(()=> Role)
+    @JoinColumn({name : "role_id"})
+    role: Role;
 }

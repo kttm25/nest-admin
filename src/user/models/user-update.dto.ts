@@ -8,4 +8,6 @@ export class UserUpdateDto{
     @IsEmail()
     email: string;
 
+    @IsNotEmpty()
+    role_id: number;
 }
