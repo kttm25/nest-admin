@@ -14,7 +14,7 @@ export class RoleService {
     }
 
     async findOne(condition): Promise<Role>{
-        return this.roleRepository.findOne({where: condition});
+        return this.roleRepository.findOne({where: condition, relations: ["permissions"]});
     }
     
     async create(data): Promise<Role>{
