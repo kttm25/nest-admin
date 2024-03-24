@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 import { AuthGuard } from './auth.guard';
 import { PassThrough } from 'stream';
+import { AuthService } from './auth.service';
 
 //Est couplé avec le decorateur @Exclude du model afin d'empecher l'affichage de champ non desiré
 @UseInterceptors(ClassSerializerInterceptor)
@@ -14,7 +15,8 @@ export class AuthController {
 
     constructor(
         private userService: UserService,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        private authService: AuthService
     ){
 
     }
@@ -60,9 +62,8 @@ export class AuthController {
     @UseGuards(AuthGuard)
     @Get('user')
     async user(@Req() request: Request){
-        const cookie = request.cookies["jwt"];
-        const data = await this.jwtService.verifyAsync(cookie)
-        return this.userService.findOne({id : data.id});
+        const id = await this.authService.userId(request)
+        return this.userService.findOne({id});
     }
 
     @UseGuards(AuthGuard)
