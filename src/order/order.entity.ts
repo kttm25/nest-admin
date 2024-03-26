@@ -29,6 +29,6 @@ export class Order{
 
     @Expose()
     get total(): number{
-        return this.order_items.reduce((sum: number, i: OrderItem) => sum + i.quantity * i.price, 0)
+        return this.order_items.reduce((sum: number, i: OrderItem) => sum + (i.quantity * i.price), 0)
     }
 }
