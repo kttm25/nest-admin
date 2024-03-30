@@ -3,6 +3,7 @@ import { OrderService } from './order.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Response } from 'express';
 import { Parser } from 'json2csv';
+import { HasPermission } from 'src/permission/has-permission.decorator';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
@@ -13,12 +14,14 @@ export class OrderController {
     }
 
     @Get('orders')
+    @HasPermission('orders')
     async all(@Query('page') page = 1){
         //return this.orderService.all(['order_items'])
         return this.orderService.paginate(page, ['order_items'])
     }
 
     @Post("export")
+    @HasPermission('orders')
     async export(@Res() res: Response) {
         const parser = new Parser({
             fields:["ID", "Name", "Email", "Product Titel", "Price", "Qunatity"]
@@ -56,6 +59,7 @@ export class OrderController {
     }
 
     @Get('chart')
+    @HasPermission('orders')
     async chart(){
         return this.orderService.chart()
     }
