@@ -17,5 +17,6 @@ export class RegisterDTO{
     @IsNotEmpty()
     password_confirm: string;
 
+    @IsNotEmpty()
     role_id: number;
 }
