@@ -5,7 +5,6 @@ import { RegisterDTO } from './models/register.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 import { AuthGuard } from './auth.guard';
-import { PassThrough } from 'stream';
 import { AuthService } from './auth.service';
 
 //Est couplé avec le decorateur @Exclude du model afin d'empecher l'affichage de champ non desiré
@@ -23,15 +22,17 @@ export class AuthController {
 
     @Post('register')
     async register(@Body() body: RegisterDTO){
+        
         if(body.password != body.password_confirm){
             throw new BadRequestException('Passwords do not match!')
         }
         const {role_id, ...data} = body;
+        
         const hashed = await bcrypt.hash(body.password, 12);
         return this.userService.create({
-            first_name: body.first_name,
-            last_name: body.last_name,
-            email: body.email,
+            first_name: data.first_name,
+            last_name: data.last_name,
+            email: data.email,
             password: hashed,
             role: {
                 id: role_id
