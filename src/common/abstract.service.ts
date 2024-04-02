@@ -13,7 +13,7 @@ export abstract class AbstractService {
     }
 
     async paginate(page = 1, relations = []): Promise<PaginatedResultInterface>{
-        const take = 10;
+        const take = 5;
         const [data, total] = await this.repository.findAndCount({
             take,
             skip: (page - 1) * take,

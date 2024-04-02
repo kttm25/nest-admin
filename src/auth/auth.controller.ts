@@ -43,7 +43,7 @@ export class AuthController {
         @Body('password') password : string,
         @Res({passthrough: true}) response: Response
     ){
-        const user = await this.userService.findOne({email});
+        const user = await this.userService.findOne({email}, ["role"]);
         if(!user){
             throw new NotFoundException('User not found')
         }
