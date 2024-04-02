@@ -14,7 +14,7 @@ export class UserService extends AbstractService{
     }
 
     async paginate(page = 1): Promise<PaginatedResultInterface>{
-        const {data, meta} = await super.paginate(page);
+        const {data, meta} = await super.paginate(page, ["role"]);
         
         return {
             data: data.map(user =>{
@@ -23,5 +23,9 @@ export class UserService extends AbstractService{
             }),
             meta: meta
         }
+    }
+
+    async all(): Promise<any[]>{
+        return super.repository.find({relations: ["role"]})
     }
 }
