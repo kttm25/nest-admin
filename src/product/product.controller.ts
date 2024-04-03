@@ -13,7 +13,7 @@ export class ProductController {
 
     @Get()
     async all(@Query('page') page = 1){
-        return this.productService.paginate()
+        return this.productService.paginate(page)
     }
 
     @Post()
